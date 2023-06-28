@@ -84,14 +84,12 @@ if [[ ${KEYS[*]} == *-x* || ${KEYS[*]} == *--echo* ]]; then
     echo -e "Выполняемые команды:"
     ECHOKEY='echo'
     # Проверка команд на разных системах инициализации:
-    if [[ ${KEYS[*]} == *:dinit* ]]; then INITSYS=dinit; fi
-    if [[ ${KEYS[*]} == *:runit* ]]; then INITSYS=runit; fi
-    if [[ ${KEYS[*]} == *:openrc* ]]; then INITSYS=openrc; fi
-    if [[ ${KEYS[*]} == *:s6* ]]; then INITSYS=s6; fi
+    [[ ${KEYS[*]} == *:dinit* ]] && INITSYS=dinit && KEYS=(${KEYS[*]/':dinit'})
+    [[ ${KEYS[*]} == *:runit* ]] && INITSYS=runit && KEYS=(${KEYS[*]/':runit'})
+    [[ ${KEYS[*]} == *:openrc* ]] && INITSYS=openrc && KEYS=(${KEYS[*]/':openrc'})
+    [[ ${KEYS[*]} == *:s6* ]] && INITSYS=s6 && KEYS=(${KEYS[*]/':s6'})
     # Очищаем массив KEYS от отладочных ключей:
     KEYS=(${KEYS[*]/'-x'}); KEYS=(${KEYS[*]/'--echo'})
-    KEYS=(${KEYS[*]/':dinit'}); KEYS=(${KEYS[*]/':runit'})
-    KEYS=(${KEYS[*]/':openrc'}); KEYS=(${KEYS[*]/':s6'})
     # Массив в переменную:
     KEY=${KEYS[*]}
 fi
@@ -105,9 +103,9 @@ fi
 ###############################################################################
 
 # Если ключей больше одного -> ОШИБКА:
-if [[ ${#KEYS[*]} > 1 ]]; then echo -e "$ERRCOMBOKEY\n$HELPNOTE" && exit 1; fi
+[[ ${#KEYS[*]} > 1 ]] && echo -e "$ERRCOMBOKEY\n$HELPNOTE" && exit 1
 # Если нет ключей -> ОШИБКА:
-if [[ ${#KEYS[*]} = 0 ]]; then echo -e "$ERRNOKEY\n$HELPNOTE" && exit 1; fi
+[[ ${#KEYS[*]} = 0 ]] && echo -e "$ERRNOKEY\n$HELPNOTE" && exit 1
 
 ###############################################################################
 ############################## Обработка ключей ###############################
@@ -256,7 +254,7 @@ esac
 ############################## Окончание отладки ##############################
 ###############################################################################
 
-if [ $ECHOKEY = 'echo' ]; then
+if [[ $ECHOKEY == echo ]]; then
     echo -e "\nАргументы на выходе из скрипта:"
     echo -e "Ключи (${#KEYS[*]} шт.): ${KEYS[*]}\n" # Обработанные ключи
 fi
