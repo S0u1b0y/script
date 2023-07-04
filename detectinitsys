@@ -6,3 +6,5 @@ if [ -f /bin/dinit ]; then echo 'dinit'; fi
 if [ -f /bin/runit ]; then echo 'runit'; fi
 if [ -f /bin/openrc ]; then echo 'openrc'; fi
 if [ -f /bin/s6-rc ]; then echo 's6'; fi
+
+exit 0
